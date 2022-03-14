@@ -1,5 +1,10 @@
 <?php 
 
+if($_SERVER['REQUEST_MEDHOD'] == 'GET'){
+	echo "hello this is index page running now \n welcome back";
+	exit();
+}
+
 header("Access-Control-Allow-Origin: *");
  header("Access-Control-Allow-Credentials: true");
     header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
