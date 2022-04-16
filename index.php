@@ -11,7 +11,7 @@ header("Access-Control-Allow-Origin: *");
     header('Access-Control-Max-Age: 1000');
     header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 
-$api_url = "http://ecommerceapi2021.000webhostapp.com/opcr/api.php";
+$api_url = "https://opcrinfo.000webhostapp.com/api/opcrinfo/newclient";
 
 
 $json = file_get_contents("php://input");
