@@ -64,6 +64,7 @@ curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
 // Set HTTP Header for POST request 
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Content-Type: application/json',
+	'Accept' : 'application/json',
     'Content-Length: ' . strlen($payload))
 );
 
