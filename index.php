@@ -27,7 +27,7 @@ if(isset($decoded_json['name'])){
 	$dob = $decoded_json['dob'];
 	$pass = array_key_exists("password", $decoded_json) ? $decoded_json['password'] : 'password123';
 
-$jsondata = json_encode([
+$jsondata = http_build_query([
 	"name" => $name, "email" => $email, "father" => $father, "mother" => $mother, "gender" => $gender,
 	"dob" => $dob, "add" => true, "password" => $pass
 ]);
@@ -63,10 +63,7 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
 
 // Set HTTP Header for POST request 
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-Type: application/json',
-    'Content-Length: ' . strlen($payload))
-);
+
 
 # Return response instead of printing.
 curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
