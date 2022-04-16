@@ -56,6 +56,10 @@ function postApi($url,$jsond)  {
 # Setup request to send json via POST.
 $payload = $jsond;
 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+	
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Content-Length: ' . strlen($payload))
+);
 
 // Use POST request
 curl_setopt($ch, CURLOPT_POST, true);
