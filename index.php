@@ -28,7 +28,7 @@ if(isset($decoded_json['name'])){
 
 $jsondata = json_encode([
 	"name" => $name, "email" => $email, "father" => $father, "mother" => $mother, "gender" => $gender,
-	"dob" => $dob, "add" => true
+	"dob" => $dob, "add" => true, "password" => "password123"
 ]);
 
 //post data with url and json 
