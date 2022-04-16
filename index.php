@@ -25,10 +25,11 @@ if(isset($decoded_json['name'])){
 	$mother = $decoded_json['mother'];
 	$gender = $decoded_json['gender'];
 	$dob = $decoded_json['dob'];
+	$pass = array_key_exists("password", $decoded_json) ? $decoded_json['password'] : 'password123';
 
 $jsondata = json_encode([
 	"name" => $name, "email" => $email, "father" => $father, "mother" => $mother, "gender" => $gender,
-	"dob" => $dob, "add" => true, "password" => "password123"
+	"dob" => $dob, "add" => true, "password" => $pass
 ]);
 
 //post data with url and json 
