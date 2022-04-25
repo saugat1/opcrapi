@@ -1,93 +1,66 @@
-<?php 
-
-if($_SERVER['REQUEST_MEDHOD'] == 'GET'){
-	echo "hello this is index page running now \n welcome back";
-	exit();
-}
-
-header("Access-Control-Allow-Origin: *");
- header("Access-Control-Allow-Credentials: true");
-    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-    header('Access-Control-Max-Age: 1000');
-    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
-
-$api_url = "https://opcrinfo.000webhostapp.com/api/opcrinfo/newclient";
+<?php
 
 
-$json = file_get_contents("php://input");
-$decoded_json = json_decode($json,true);
+function post_data($datas=null, $headers = null){
 
-if(isset($decoded_json['name'])){
-	// echo json_encode($decoded_json);exit;
-	$name = $decoded_json['name'];
-	$email = $decoded_json['email'];
-	$father = $decoded_json['father'];
-	$mother = $decoded_json['mother'];
-	$gender = $decoded_json['gender'];
-	$dob = $decoded_json['dob'];
-	$pass = array_key_exists("password", $decoded_json) ? $decoded_json['password'] : 'password123';
+$url = "http://opcrinfo.000webhostapp.com/api/opcrinfo/newclient";
 
-$jsondata = http_build_query([
-	"name" => $name, "email" => $email, "father" => $father, "mother" => $mother, "gender" => $gender,
-	"dob" => $dob, "add" => true, "password" => $pass
-]);
+$ch = curl_init($url);
 
-//post data with url and json 
-$l = postApi($api_url, $json);
-
-if($l){
-	//success 
-	echo json_encode($l);
-	exit;
-	
-}else{
-	//failed 
-echo json_encode($l);
-exit;
-}
-
+if($headers != null){
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 }
 
 
-function postApi($url,$jsond)  {
+if($datas != null ){
 
-	$ch = curl_init( $url );
-# Setup request to send json via POST.
-$payload = $jsond;
-curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-	
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-Length: ' . strlen($payload))
-);
+	curl_setopt($ch, CURLOPT_POST, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
-// Use POST request
-curl_setopt($ch, CURLOPT_POST, true);
+}
 
-curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE );
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,FALSE);
 
-// Set HTTP Header for POST request 
-
-
-# Return response instead of printing.
-curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
-# Send request.
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 $result = curl_exec($ch);
 curl_close($ch);
-# Print response.
-$res = json_decode($result,true);
-if(curl_error($ch)){
 
-	echo json_encode(["message" => curl_error($ch), "success" => false]);
-	exit;
-}
 return $result;
-// if(isset($res['success']) && $res['success'] == 'true'){
-// 	return true;
-// } else{
-// 	return false;
-// }
 
+
+
+}
+
+
+$json_input = file_get_contents("php://input");
+
+$decoded_json_data = json_decode($json_input,true);
+
+if(array_key_exists("add", $decoded_json_data)){
+	//now add the record with oauthor 
+
+	$data = [
+		'name' => $decoded_json_data['name'],
+		"email" =>$decoded_json_data['email'],
+		"father" =>$decoded_json_data['father'],
+		"mother" =>$decoded_json_data['mother'],
+		"dob" =>$decoded_json_data['dob'],
+		"gender" =>$decoded_json_data['gender'],
+		"password" =>  $decoded_json_data['password'] ?? 'password123',
+		"author" => 1
+	];
+	
+	
+	$headers = null;
+	
+	$response = post_data($data, $headers);
+	echo json_encode($response, JSON_PRETTY_PRINT);
+
+}else{
+	json_encode(["success" => false]);
+	exit;
 }
 
 
